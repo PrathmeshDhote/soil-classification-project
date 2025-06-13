@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Soil Testing and Classification</title>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #ffffff;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-primary: #000000;
+      --color-primary-hover: #333333;
+      --color-card-bg: #f9fafb;
+      --color-shadow: rgba(0, 0, 0, 0.05);
+      --border-radius: 12px;
+      --spacing: 1rem;
+      --max-width: 1000px;
+      --transition-duration: 0.3s;
+      --font-family: 'Poppins', sans-serif;
+      --input-bg: #ffffff;
+      --input-border: #d1d5db;
+      --input-focus-border: #000000;
+    }
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background-color: var(--color-bg);
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      font-size: 18px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--spacing);
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    /* Header and nav */
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--color-bg);
+      box-shadow: 0 2px 8px var(--color-shadow);
+      z-index: 100;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing);
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--color-primary);
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .nav-links a {
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      transition: color var(--transition-duration);
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .nav-links a:hover,
+    .nav-links a:focus {
+      color: var(--color-primary);
+      outline: none;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem 4rem;
+      color: var(--color-primary);
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+    }
+    .hero p {
+      font-weight: 600;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      color: var(--color-text-secondary);
+      font-size: 1.2rem;
+    }
+
+    /* Sections container */
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    /* Tab navigation */
+    .tab-nav {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 2px solid #e5e7eb;
+      margin-bottom: 2rem;
+    }
+    .tab-nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 1.125rem;
+      color: var(--color-text-secondary);
+      transition: color var(--transition-duration), border-color var(--transition-duration);
+      user-select: none;
+    }
+    .tab-nav button[aria-selected="true"] {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+      cursor: default;
+    }
+    .tab-nav button:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Panels */
+    .tab-panel {
+      display: none;
+      background-color: var(--color-card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 20px var(--color-shadow);
+      color: var(--color-text-primary);
+    }
+    .tab-panel[aria-hidden="false"] {
+      display: block;
+    }
+
+    /* Forms */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--color-text-primary);
+      display: block;
+    }
+    input[type="number"],
+    input[type="file"] {
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      background-color: var(--input-bg);
+      color: var(--color-text-primary);
+      transition: border-color var(--transition-duration);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    input[type="number"]:focus,
+    input[type="file"]:focus {
+      outline: none;
+      border-color: var(--input-focus-border);
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+    button.submit-btn {
+      background-color: var(--color-primary);
+      color: var(--color-bg);
+      font-weight: 700;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--border-radius);
+      font-size: 1.125rem;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background-color var(--transition-duration), transform var(--transition-duration);
+    }
+    button.submit-btn:hover,
+    button.submit-btn:focus {
+      background-color: var(--color-primary-hover);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    /* Result display */
+    .result {
+      margin-top: 1.5rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-primary);
+      min-height: 2em;
+    }
+
+    /* Responsive grid layout for forms */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem 2rem;
+    }
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      main {
+        padding: 0 0.5rem;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+<header>
+  <nav>
+    <div class="logo" tabindex="0" aria-label="Soil Classification Logo">SoilClassify</div>
+    <div class="nav-links" role="navigation" aria-label="Primary Navigation">
+      <a href="#params-tab" tabindex="0">Parameters</a>
+      <a href="#image-tab" tabindex="0">Image Upload</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero" role="banner" aria-labelledby="hero-title">
+  <h1 id="hero-title">Soil Testing and Classification</h1>
+  <p>Classify soil type by entering soil test parameters or by uploading an image of the soil.</p>
+</section>
+
+<main>
+  <div class="tab-nav" role="tablist" aria-label="Classification Methods">
+    <button role="tab" id="params-tab" aria-selected="true" aria-controls="params-panel" tabindex="0">Parameters</button>
+    <button role="tab" id="image-tab" aria-selected="false" aria-controls="image-panel" tabindex="-1">Image Upload</button>
+  </div>
+
+  <section id="params-panel" class="tab-panel" role="tabpanel" tabindex="0" aria-labelledby="params-tab" aria-hidden="false">
+    <h2>Classify Soil by Parameters</h2>
+    <form id="paramsForm" aria-describedby="paramsHelp">
+      <p id="paramsHelp" class="sr-only">Enter soil parameters like pH, organic carbon, nitrogen, phosphorus, potassium, and soil texture percentages to classify the soil type.</p>
+      <div class="form-grid">
+        <div>
+          <label for="pH">pH</label>
+          <input type="number" id="pH" name="pH" step="0.01" min="0" max="14" required />
+        </div>
+        <div>
+          <label for="OrganicCarbon">Organic Carbon (%)</label>
+          <input type="number" id="OrganicCarbon" name="OrganicCarbon" step="0.01" min="0" required />
+        </div>
+        <div>
+          <label for="Nitrogen">Nitrogen</label>
+          <input type="number" id="Nitrogen" name="Nitrogen" step="0.01" min="0" required />
+        </div>
+        <div>
+          <label for="Phosphorus">Phosphorus</label>
+          <input type="number" id="Phosphorus" name="Phosphorus" step="0.01" min="0" required />
+        </div>
+        <div>
+          <label for="Potassium">Potassium</label>
+          <input type="number" id="Potassium" name="Potassium" step="0.01" min="0" required />
+        </div>
+        <div>
+          <label for="Sand">Sand (%)</label>
+          <input type="number" id="Sand" name="Sand" step="0.1" min="0" max="100" required />
+        </div>
+        <div>
+          <label for="Silt">Silt (%)</label>
+          <input type="number" id="Silt" name="Silt" step="0.1" min="0" max="100" required />
+        </div>
+        <div>
+          <label for="Clay">Clay (%)</label>
+          <input type="number" id="Clay" name="Clay" step="0.1" min="0" max="100" required />
+        </div>
+      </div>
+      <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Parameters">Predict</button>
+      <p id="paramsResult" class="result" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section id="image-panel" class="tab-panel" role="tabpanel" tabindex="0" aria-labelledby="image-tab" aria-hidden="true">
+    <h2>Classify Soil by Image Upload</h2>
+    <form id="imageForm" aria-describedby="imageHelp" enctype="multipart/form-data">
+      <p id="imageHelp" class="sr-only">Upload an image of the soil sample to classify soil type automatically.</p>
+      <label for="soilImage">Upload Soil Image</label>
+      <input type="file" id="soilImage" name="soilImage" accept="image/*" required />
+      <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Image">Predict</button>
+      <p id="imageResult" class="result" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
+
+<footer role="contentinfo" style="width:100%; text-align:center; border-top:1px solid #e5e7eb; padding:2rem 1rem; color:var(--color-text-secondary); font-size:0.875rem; user-select:none;">
+  &copy; 2024 SoilClassify &mdash; Built with care for developers and agriculture enthusiasts
+</footer>
+
+<script>
+  // Tab switching logic for accessibility and UX
+  const tabButtons = document.querySelectorAll('.tab-nav [role="tab"]');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      tabButtons.forEach(btn => {
+        btn.setAttribute('aria-selected', 'false');
+        btn.tabIndex = -1;
+      });
+      button.setAttribute('aria-selected', 'true');
+      button.tabIndex = 0;
+
+      tabPanels.forEach(panel => {
+        panel.setAttribute('aria-hidden', 'true');
+      });
+      const panel = document.getElementById(button.getAttribute('aria-controls'));
+      panel.setAttribute('aria-hidden', 'false');
+      panel.focus();
+    });
+  });
+
+  // Helper: fetch wrapper for JSON POST with error handling
+  async function postJSON(url, data) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(err || response.statusText);
+    }
+    return response.json();
+  }
+
+  // Helper: fetch wrapper for POST with formData (file uploads)
+  async function postFormData(url, formData) {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(err || response.statusText);
+    }
+    return response.json();
+  }
+
+  // Parameter form submission handler
+  const paramsForm = document.getElementById('paramsForm');
+  const paramsResult = document.getElementById('paramsResult');
+  paramsForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    paramsResult.textContent = 'Classifying... Please wait.';
+    const formData = new FormData(paramsForm);
+    // Convert formData to plain object with floats
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = parseFloat(value);
+    });
+
+    try {
+      // Update '/predict-params' to your backend API endpoint
+      const result = await postJSON('http://127.0.0.1:5000/predict-params', data);
+
+      paramsResult.textContent = result.soil_type || 'No prediction returned.';
+    } catch (error) {
+      paramsResult.textContent = 'Error: ' + error.message;
+    }
+  });
+
+  // Image form submission handler
+  const imageForm = document.getElementById('imageForm');
+  const imageInput = document.getElementById('soilImage');
+  const imageResult = document.getElementById('imageResult');
+  imageForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    imageResult.textContent = 'Classifying... Please wait.';
+    if (!imageInput.files.length) {
+      imageResult.textContent = 'Please select an image file.';
+      return;
+    }
+    const formData = new FormData();
+    formData.append('image', imageInput.files[0]);
+
+    try {
+      // Update '/predict-image' to your backend API endpoint
+      const result = await postFormData('http://127.0.0.1:5000/predict-image', formData);
+      imageResult.textContent = result.soil_type || 'No prediction returned.';
+    } catch (error) {
+      imageResult.textContent = 'Error: ' + error.message;
+    }
+  });
+</script>
+
+<!-- Accessibility: visually hidden class -->
+<style>
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    border: 0 !important;
+  }
+</style>
+
+</body>
+</html>
+
