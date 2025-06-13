@@ -19,7 +19,11 @@ def main():
             print("Exiting setup. Please install a compatible Python version (3.8 - 3.11).")
             sys.exit(0)
 
-    # First, uninstall potentially conflicting packages to avoid version conflicts
+    # Upgrade pip to latest version first for best compatibility
+    print("Upgrading pip to the latest version...")
+    run_command(f"{sys.executable} -m pip install --upgrade pip")
+
+    # Uninstall existing packages if any
     print("Uninstalling existing packages if any...")
     uninstall_packages = [
         "tensorflow",
@@ -27,21 +31,22 @@ def main():
         "pandas",
         "scikit-learn",
         "flask",
-        "pillow"
+        "pillow",
+        "flask-cors"
     ]
     for pkg in uninstall_packages:
         run_command(f"{sys.executable} -m pip uninstall -y {pkg}")
 
-    # Now, reinstall all packages pinned to compatible versions
+    # Install compatible package versions including flask-cors
     print("Installing compatible package versions...")
 
     install_commands = [
-        # Use TensorFlow with a stable compatible version with Python 3.8-3.11
         f"{sys.executable} -m pip install numpy==1.24.4",
         f"{sys.executable} -m pip install pandas==1.5.3",
         f"{sys.executable} -m pip install scikit-learn==1.2.2",
         f"{sys.executable} -m pip install flask==2.2.4",
         f"{sys.executable} -m pip install pillow==9.5.0",
+        f"{sys.executable} -m pip install flask-cors==3.1.0",
         f"{sys.executable} -m pip install tensorflow==2.13.0"
     ]
 
@@ -49,10 +54,8 @@ def main():
         run_command(cmd)
 
     print("\n✅ All packages installed successfully with compatible versions.")
-    print("You can now run your project without version conflicts.")
     print(f"Your Python version: {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
     print("Finished environment setup.")
 
 if __name__ == "__main__":
     main()
-
