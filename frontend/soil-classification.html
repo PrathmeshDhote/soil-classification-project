@@ -7,7 +7,8 @@
   <!-- Google Fonts: Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
+    /* (Your existing CSS styles remain unchanged) */
+     :root {
       --color-bg: #ffffff;
       --color-text-primary: #111827;
       --color-text-secondary: #6b7280;
@@ -246,6 +247,7 @@
       }
     }
 
+
   </style>
 </head>
 <body>
@@ -310,6 +312,7 @@
       </div>
       <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Parameters">Predict</button>
       <p id="paramsResult" class="result" aria-live="polite"></p>
+      <p id="cropRecommendation" class="result" aria-live="polite"></p> <!-- New element for crop recommendation -->
     </form>
   </section>
 
@@ -321,16 +324,18 @@
       <input type="file" id="soilImage" name="soilImage" accept="image/*" required />
       <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Image">Predict</button>
       <p id="imageResult" class="result" aria-live="polite"></p>
+      <p id="imageCropRecommendation" class="result" aria-live="polite"></p> <!-- New element for crop recommendation -->
     </form>
   </section>
 </main>
 
 <footer role="contentinfo" style="width:100%; text-align:center; border-top:1px solid #e5e7eb; padding:2rem 1rem; color:var(--color-text-secondary); font-size:0.875rem; user-select:none;">
-  &copy; 2024 SoilClassify &mdash; Built with care for developers and agriculture enthusiasts
+  &copy; 2025 SoilClassify &mdash; Built with care for developers and agriculture enthusiasts by Prathmesh Dhote
 </footer>
 
 <script>
-  // Tab switching logic for accessibility and UX
+  // (Your existing JavaScript code remains unchanged until the form submission handlers)
+ // Tab switching logic for accessibility and UX
   const tabButtons = document.querySelectorAll('.tab-nav [role="tab"]');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -382,9 +387,11 @@
   // Parameter form submission handler
   const paramsForm = document.getElementById('paramsForm');
   const paramsResult = document.getElementById('paramsResult');
+  const cropRecommendation = document.getElementById('cropRecommendation'); // New reference for crop recommendation
   paramsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     paramsResult.textContent = 'Classifying... Please wait.';
+    cropRecommendation.textContent = ''; // Clear previous recommendation
     const formData = new FormData(paramsForm);
     // Convert formData to plain object with floats
     const data = {};
@@ -397,8 +404,10 @@
       const result = await postJSON('http://127.0.0.1:5000/predict-params', data);
 
       paramsResult.textContent = result.soil_type || 'No prediction returned.';
+      cropRecommendation.textContent = result.crop_recommendation || 'No recommendation available.'; // Display crop recommendation
     } catch (error) {
       paramsResult.textContent = 'Error: ' + error.message;
+      cropRecommendation.textContent = ''; // Clear recommendation on error
     }
   });
 
@@ -406,9 +415,11 @@
   const imageForm = document.getElementById('imageForm');
   const imageInput = document.getElementById('soilImage');
   const imageResult = document.getElementById('imageResult');
+  const imageCropRecommendation = document.getElementById('imageCropRecommendation'); // New reference for crop recommendation
   imageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     imageResult.textContent = 'Classifying... Please wait.';
+    imageCropRecommendation.textContent = ''; // Clear previous recommendation
     if (!imageInput.files.length) {
       imageResult.textContent = 'Please select an image file.';
       return;
@@ -420,8 +431,11 @@
       // Update '/predict-image' to your backend API endpoint
       const result = await postFormData('http://127.0.0.1:5000/predict-image', formData);
       imageResult.textContent = result.soil_type || 'No prediction returned.';
+      // Assuming you have a similar recommendation logic for image predictions
+      imageCropRecommendation.textContent = 'No crop recommendation available for image predictions.'; // Placeholder
     } catch (error) {
       imageResult.textContent = 'Error: ' + error.message;
+      imageCropRecommendation.textContent = ''; // Clear recommendation on error
     }
   });
 </script>
@@ -442,4 +456,3 @@
 
 </body>
 </html>
-
