@@ -4,11 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Soil Testing and Classification</title>
-  <!-- Google Fonts: Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     /* (Your existing CSS styles remain unchanged) */
-     :root {
+      :root {
       --color-bg: #ffffff;
       --color-text-primary: #111827;
       --color-text-secondary: #6b7280;
@@ -229,6 +228,36 @@
       min-height: 2em;
     }
 
+    /* New styles for structured recommendations */
+    .recommendation-output h3 {
+        font-size: 1.8rem; /* Larger font for soil type title */
+        margin-bottom: 1rem;
+        color: var(--color-text-primary);
+        font-weight: 800;
+    }
+    .recommendation-output ul {
+        list-style-type: disc; /* Default bullet points */
+        padding-left: 25px; /* Indent for main list items */
+        margin: 0.5rem 0;
+    }
+    .recommendation-output ul ul {
+        list-style-type: disc; /* Nested bullet points */
+        padding-left: 20px; /* Further indent for nested items */
+        margin: 0.25rem 0;
+    }
+    .recommendation-output li {
+        margin-bottom: 0.5rem;
+    }
+    .recommendation-output li strong {
+        font-weight: 600; /* Bold for category names */
+        color: var(--color-primary);
+    }
+    /* Make crop names italic */
+    .recommendation-output li span.crop-name {
+        font-style: italic;
+    }
+
+
     /* Responsive grid layout for forms */
     .form-grid {
       display: grid;
@@ -246,8 +275,6 @@
         font-size: 2.5rem;
       }
     }
-
-
   </style>
 </head>
 <body>
@@ -311,8 +338,8 @@
         </div>
       </div>
       <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Parameters">Predict</button>
-      <p id="paramsResult" class="result" aria-live="polite"></p>
-      <p id="cropRecommendation" class="result" aria-live="polite"></p> <!-- New element for crop recommendation -->
+      <div id="paramsResult" class="result" aria-live="polite"></div>
+      <div id="cropRecommendation" class="result recommendation-output" aria-live="polite"></div>
     </form>
   </section>
 
@@ -323,9 +350,8 @@
       <label for="soilImage">Upload Soil Image</label>
       <input type="file" id="soilImage" name="soilImage" accept="image/*" required />
       <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Image">Predict</button>
-      <p id="imageResult" class="result" aria-live="polite"></p>
-      <p id="imageCropRecommendation" class="result" aria-live="polite"></p> <!-- New element for crop recommendation -->
-    </form>
+      <div id="imageResult" class="result" aria-live="polite"></div>
+      <p id="imageCropRecommendation" class="result" aria-live="polite">No crop recommendation available for image predictions.</p> </form>
   </section>
 </main>
 
@@ -334,8 +360,7 @@
 </footer>
 
 <script>
-  // (Your existing JavaScript code remains unchanged until the form submission handlers)
- // Tab switching logic for accessibility and UX
+  // Tab switching logic for accessibility and UX
   const tabButtons = document.querySelectorAll('.tab-nav [role="tab"]');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -384,14 +409,60 @@
     return response.json();
   }
 
+  // Function to render the structured crop recommendation
+  function renderCropRecommendation(recommendationData, targetElement) {
+    targetElement.innerHTML = ''; // Clear previous content
+
+    if (!recommendationData) {
+        targetElement.textContent = 'No recommendation available for this soil type.';
+        return;
+    }
+
+    let html = '';
+
+    // Title
+    if (recommendationData.title) {
+        html += `<h3>${recommendationData.title}</h3>`;
+    }
+
+    html += '<ul>';
+
+    // Found in
+    if (recommendationData.found_in) {
+        html += `<li>Found in: <span class="crop-name">${recommendationData.found_in}</span></li>`;
+    }
+
+    // Best Crops section
+    if (recommendationData.crops && Object.keys(recommendationData.crops).length > 0) {
+        html += `<li>Best Crops:`;
+        html += `<ul>`;
+        for (const category in recommendationData.crops) {
+            if (recommendationData.crops.hasOwnProperty(category)) {
+                const crops = recommendationData.crops[category];
+                html += `<li><strong>${category}:</strong> `;
+                html += `<span class="crop-name">${crops.join(', ')}</span>`;
+                html += `</li>`;
+            }
+        }
+        html += `</ul>`;
+        html += `</li>`;
+    } else {
+        html += `<li>No specific crop recommendations available for this soil type.</li>`;
+    }
+
+    html += '</ul>';
+    targetElement.innerHTML = html;
+  }
+
+
   // Parameter form submission handler
   const paramsForm = document.getElementById('paramsForm');
   const paramsResult = document.getElementById('paramsResult');
-  const cropRecommendation = document.getElementById('cropRecommendation'); // New reference for crop recommendation
+  const cropRecommendationDiv = document.getElementById('cropRecommendation'); // Renamed for clarity
   paramsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     paramsResult.textContent = 'Classifying... Please wait.';
-    cropRecommendation.textContent = ''; // Clear previous recommendation
+    cropRecommendationDiv.innerHTML = ''; // Clear previous recommendation using innerHTML
     const formData = new FormData(paramsForm);
     // Convert formData to plain object with floats
     const data = {};
@@ -400,14 +471,21 @@
     });
 
     try {
-      // Update '/predict-params' to your backend API endpoint
       const result = await postJSON('http://127.0.0.1:5000/predict-params', data);
 
-      paramsResult.textContent = result.soil_type || 'No prediction returned.';
-      cropRecommendation.textContent = result.crop_recommendation || 'No recommendation available.'; // Display crop recommendation
+      // Display the soil type prediction (e.g., "Alluvial Soil")
+      paramsResult.textContent = `Predicted Soil Type: ${result.soil_type || 'No prediction returned.'}`;
+
+      // Render the structured crop recommendation
+      if (result.crop_recommendation) {
+        renderCropRecommendation(result.crop_recommendation, cropRecommendationDiv);
+      } else {
+        cropRecommendationDiv.textContent = 'No detailed recommendation available.';
+      }
+
     } catch (error) {
       paramsResult.textContent = 'Error: ' + error.message;
-      cropRecommendation.textContent = ''; // Clear recommendation on error
+      cropRecommendationDiv.innerHTML = ''; // Clear recommendation on error
     }
   });
 
@@ -415,11 +493,11 @@
   const imageForm = document.getElementById('imageForm');
   const imageInput = document.getElementById('soilImage');
   const imageResult = document.getElementById('imageResult');
-  const imageCropRecommendation = document.getElementById('imageCropRecommendation'); // New reference for crop recommendation
+  const imageCropRecommendation = document.getElementById('imageCropRecommendation');
   imageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     imageResult.textContent = 'Classifying... Please wait.';
-    imageCropRecommendation.textContent = ''; // Clear previous recommendation
+    imageCropRecommendation.textContent = 'No crop recommendation available for image predictions.'; // Keep this hardcoded as per your existing setup
     if (!imageInput.files.length) {
       imageResult.textContent = 'Please select an image file.';
       return;
@@ -428,19 +506,16 @@
     formData.append('image', imageInput.files[0]);
 
     try {
-      // Update '/predict-image' to your backend API endpoint
       const result = await postFormData('http://127.0.0.1:5000/predict-image', formData);
-      imageResult.textContent = result.soil_type || 'No prediction returned.';
-      // Assuming you have a similar recommendation logic for image predictions
-      imageCropRecommendation.textContent = 'No crop recommendation available for image predictions.'; // Placeholder
+      imageResult.textContent = `Predicted Soil Type: ${result.soil_type || 'No prediction returned.'}`;
+      // imageCropRecommendation remains unchanged
     } catch (error) {
       imageResult.textContent = 'Error: ' + error.message;
-      imageCropRecommendation.textContent = ''; // Clear recommendation on error
+      // imageCropRecommendation remains unchanged
     }
   });
 </script>
 
-<!-- Accessibility: visually hidden class -->
 <style>
   .sr-only {
     position: absolute !important;
