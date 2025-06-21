@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Soil Testing and Classification</title>
+  <title data-i18n="pageTitle">Soil Testing and Classification</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
   <style>
-    /* (Your existing CSS styles remain unchanged) */
-      :root {
+    :root {
       --color-bg: #ffffff;
       --color-text-primary: #111827;
       --color-text-secondary: #6b7280;
@@ -82,19 +81,27 @@
       display: flex;
       gap: 1.5rem;
     }
-    .nav-links a {
+    .nav-links button { /* Changed a to button */
+      background: none;
+      border: none;
       font-weight: 600;
       color: var(--color-text-secondary);
       transition: color var(--transition-duration);
       padding: 0.25rem 0.5rem;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 1rem; /* Adjust font size for buttons if needed */
     }
-    .nav-links a:hover,
-    .nav-links a:focus {
+    .nav-links button:hover,
+    .nav-links button:focus,
+    .nav-links button.active { /* Added active class for selected language */
       color: var(--color-primary);
       outline: none;
       background-color: rgba(0, 0, 0, 0.05);
+    }
+    .nav-links button.active {
+        pointer-events: none; /* Disable click on active language */
+        font-weight: 700;
     }
 
     /* Hero */
@@ -230,29 +237,28 @@
 
     /* New styles for structured recommendations */
     .recommendation-output h3 {
-        font-size: 1.8rem; /* Larger font for soil type title */
+        font-size: 1.8rem;
         margin-bottom: 1rem;
         color: var(--color-text-primary);
         font-weight: 800;
     }
     .recommendation-output ul {
-        list-style-type: disc; /* Default bullet points */
-        padding-left: 25px; /* Indent for main list items */
+        list-style-type: disc;
+        padding-left: 25px;
         margin: 0.5rem 0;
     }
     .recommendation-output ul ul {
-        list-style-type: disc; /* Nested bullet points */
-        padding-left: 20px; /* Further indent for nested items */
+        list-style-type: disc;
+        padding-left: 20px;
         margin: 0.25rem 0;
     }
     .recommendation-output li {
         margin-bottom: 0.5rem;
     }
     .recommendation-output li strong {
-        font-weight: 600; /* Bold for category names */
+        font-weight: 600;
         color: var(--color-primary);
     }
-    /* Make crop names italic */
     .recommendation-output li span.crop-name {
         font-style: italic;
     }
@@ -281,86 +287,87 @@
 <header>
   <nav>
     <div class="logo" tabindex="0" aria-label="Soil Classification Logo">SoilClassify</div>
-    <div class="nav-links" role="navigation" aria-label="Primary Navigation">
-      <a href="#params-tab" tabindex="0">Parameters</a>
-      <a href="#image-tab" tabindex="0">Image Upload</a>
+    <div class="nav-links" role="navigation" aria-label="Language selection">
+      <button id="lang-en" data-lang="en" class="active" aria-label="Select English language">English</button>
+      <button id="lang-mr" data-lang="mr" aria-label="Select Marathi language">मराठी</button>
     </div>
   </nav>
 </header>
 
 <section class="hero" role="banner" aria-labelledby="hero-title">
-  <h1 id="hero-title">Soil Testing and Classification</h1>
-  <p>Classify soil type by entering soil test parameters or by uploading an image of the soil.</p>
+  <h1 id="hero-title" data-i18n="heroTitle">Soil Testing and Classification</h1>
+  <p data-i18n="heroSubtitle">Classify soil type by entering soil test parameters or by uploading an image of the soil.</p>
 </section>
 
 <main>
   <div class="tab-nav" role="tablist" aria-label="Classification Methods">
-    <button role="tab" id="params-tab" aria-selected="true" aria-controls="params-panel" tabindex="0">Parameters</button>
-    <button role="tab" id="image-tab" aria-selected="false" aria-controls="image-panel" tabindex="-1">Image Upload</button>
+    <button role="tab" id="params-tab" aria-selected="true" aria-controls="params-panel" tabindex="0" data-i18n="tabParams">Parameters</button>
+    <button role="tab" id="image-tab" aria-selected="false" aria-controls="image-panel" tabindex="-1" data-i18n="tabImage">Image Upload</button>
   </div>
 
   <section id="params-panel" class="tab-panel" role="tabpanel" tabindex="0" aria-labelledby="params-tab" aria-hidden="false">
-    <h2>Classify Soil by Parameters</h2>
+    <h2 data-i18n="paramsPanelTitle">Classify Soil by Parameters</h2>
     <form id="paramsForm" aria-describedby="paramsHelp">
-      <p id="paramsHelp" class="sr-only">Enter soil parameters like pH, organic carbon, nitrogen, phosphorus, potassium, and soil texture percentages to classify the soil type.</p>
+      <p id="paramsHelp" class="sr-only" data-i18n="paramsHelp">Enter soil parameters like pH, organic carbon, nitrogen, phosphorus, potassium, and soil texture percentages to classify the soil type.</p>
       <div class="form-grid">
         <div>
-          <label for="pH">pH</label>
+          <label for="pH" data-i18n="labelpH">pH</label>
           <input type="number" id="pH" name="pH" step="0.01" min="0" max="14" required />
         </div>
         <div>
-          <label for="OrganicCarbon">Organic Carbon (%)</label>
+          <label for="OrganicCarbon" data-i18n="labelOrganicCarbon">Organic Carbon (%)</label>
           <input type="number" id="OrganicCarbon" name="OrganicCarbon" step="0.01" min="0" required />
         </div>
         <div>
-          <label for="Nitrogen">Nitrogen</label>
+          <label for="Nitrogen" data-i18n="labelNitrogen">Nitrogen</label>
           <input type="number" id="Nitrogen" name="Nitrogen" step="0.01" min="0" required />
         </div>
         <div>
-          <label for="Phosphorus">Phosphorus</label>
+          <label for="Phosphorus" data-i18n="labelPhosphorus">Phosphorus</label>
           <input type="number" id="Phosphorus" name="Phosphorus" step="0.01" min="0" required />
         </div>
         <div>
-          <label for="Potassium">Potassium</label>
+          <label for="Potassium" data-i18n="labelPotassium">Potassium</label>
           <input type="number" id="Potassium" name="Potassium" step="0.01" min="0" required />
         </div>
         <div>
-          <label for="Sand">Sand (%)</label>
+          <label for="Sand" data-i18n="labelSand">Sand (%)</label>
           <input type="number" id="Sand" name="Sand" step="0.1" min="0" max="100" required />
         </div>
         <div>
-          <label for="Silt">Silt (%)</label>
+          <label for="Silt" data-i18n="labelSilt">Silt (%)</label>
           <input type="number" id="Silt" name="Silt" step="0.1" min="0" max="100" required />
         </div>
         <div>
-          <label for="Clay">Clay (%)</label>
+          <label for="Clay" data-i18n="labelClay">Clay (%)</label>
           <input type="number" id="Clay" name="Clay" step="0.1" min="0" max="100" required />
         </div>
       </div>
-      <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Parameters">Predict</button>
+      <button type="submit" class="submit-btn" data-i18n="predictBtn" aria-label="Predict Soil Type Using Parameters">Predict</button>
       <div id="paramsResult" class="result" aria-live="polite"></div>
       <div id="cropRecommendation" class="result recommendation-output" aria-live="polite"></div>
     </form>
   </section>
 
   <section id="image-panel" class="tab-panel" role="tabpanel" tabindex="0" aria-labelledby="image-tab" aria-hidden="true">
-    <h2>Classify Soil by Image Upload</h2>
+    <h2 data-i18n="imagePanelTitle">Classify Soil by Image Upload</h2>
     <form id="imageForm" aria-describedby="imageHelp" enctype="multipart/form-data">
-      <p id="imageHelp" class="sr-only">Upload an image of the soil sample to classify soil type automatically.</p>
-      <label for="soilImage">Upload Soil Image</label>
+      <p id="imageHelp" class="sr-only" data-i18n="imageHelp">Upload an image of the soil sample to classify soil type automatically.</p>
+      <label for="soilImage" data-i18n="labelSoilImage">Upload Soil Image</label>
       <input type="file" id="soilImage" name="soilImage" accept="image/*" required />
-      <button type="submit" class="submit-btn" aria-label="Predict Soil Type Using Image">Predict</button>
+      <button type="submit" class="submit-btn" data-i18n="predictBtn" aria-label="Predict Soil Type Using Image">Predict</button>
       <div id="imageResult" class="result" aria-live="polite"></div>
-      <p id="imageCropRecommendation" class="result" aria-live="polite">No crop recommendation available for image predictions.</p> </form>
+      <p id="imageCropRecommendation" class="result" aria-live="polite" data-i18n="imageRecPlaceholder">No crop recommendation available for image predictions.</p>
+    </form>
   </section>
 </main>
 
 <footer role="contentinfo" style="width:100%; text-align:center; border-top:1px solid #e5e7eb; padding:2rem 1rem; color:var(--color-text-secondary); font-size:0.875rem; user-select:none;">
-  &copy; 2025 SoilClassify &mdash; Built with care for developers and agriculture enthusiasts by Prathmesh Dhote
+  <span data-i18n="footerText">&copy; 2025 SoilClassify &mdash; Built with care for developers and agriculture enthusiasts by Prathmesh Dhote</span>
 </footer>
 
 <script>
-  // Tab switching logic for accessibility and UX
+  // Tab switching logic (remains unchanged)
   const tabButtons = document.querySelectorAll('.tab-nav [role="tab"]');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -382,7 +389,7 @@
     });
   });
 
-  // Helper: fetch wrapper for JSON POST with error handling
+  // Helper: fetch wrapper for JSON POST with error handling (remains unchanged)
   async function postJSON(url, data) {
     const response = await fetch(url, {
       method: 'POST',
@@ -396,7 +403,7 @@
     return response.json();
   }
 
-  // Helper: fetch wrapper for POST with formData (file uploads)
+  // Helper: fetch wrapper for POST with formData (file uploads) (remains unchanged)
   async function postFormData(url, formData) {
     const response = await fetch(url, {
       method: 'POST',
@@ -409,18 +416,128 @@
     return response.json();
   }
 
-  // Function to render the structured crop recommendation
+  // Language Translation Logic
+  const translations = {
+    en: {
+      pageTitle: "Soil Testing and Classification",
+      heroTitle: "Soil Testing and Classification",
+      heroSubtitle: "Classify soil type by entering soil test parameters or by uploading an image of the soil.",
+      tabParams: "Parameters",
+      tabImage: "Image Upload",
+      paramsPanelTitle: "Classify Soil by Parameters",
+      paramsHelp: "Enter soil parameters like pH, organic carbon, nitrogen, phosphorus, potassium, and soil texture percentages to classify the soil type.",
+      labelpH: "pH",
+      labelOrganicCarbon: "Organic Carbon (%)",
+      labelNitrogen: "Nitrogen",
+      labelPhosphorus: "Phosphorus",
+      labelPotassium: "Potassium",
+      labelSand: "Sand (%)",
+      labelSilt: "Silt (%)",
+      labelClay: "Clay (%)",
+      predictBtn: "Predict",
+      imagePanelTitle: "Classify Soil by Image Upload",
+      imageHelp: "Upload an image of the soil sample to classify soil type automatically.",
+      labelSoilImage: "Upload Soil Image",
+      imageRecPlaceholder: "No crop recommendation available for image predictions.",
+      footerText: "&copy; 2025 SoilClassify &mdash; Built with care for developers and agriculture enthusiasts by Prathmesh Dhote",
+      // Dynamic content labels for results (these are combined with backend data)
+      predictedSoilTypeLabel: "Predicted Soil Type: ",
+      classifyingMessage: "Classifying... Please wait.",
+      errorPrefix: "Error: ",
+      noPredictionReturned: "No prediction returned.",
+      noDetailedRecommendation: "No detailed recommendation available.",
+      recommendationAvailable: "Recommendation:", // For the new render function
+      foundInLabel: "Found in:",
+      bestCropsLabel: "Best Crops:",
+      noSpecificCrops: "No specific crop recommendations available for this soil type."
+    },
+    mr: { // Marathi Translations
+      pageTitle: "माती परीक्षण आणि वर्गीकरण",
+      heroTitle: "माती परीक्षण आणि वर्गीकरण",
+      heroSubtitle: "मातीचे मापदंड टाकून किंवा मातीचा फोटो अपलोड करून मातीचा प्रकार निश्चित करा.",
+      tabParams: "मापदंड",
+      tabImage: "प्रतिमा अपलोड करा",
+      paramsPanelTitle: "मापदंडानुसार मातीचे वर्गीकरण करा",
+      paramsHelp: "मातीचा प्रकार निश्चित करण्यासाठी pH, सेंद्रिय कार्बन, नायट्रोजन, फॉस्फरस, पोटॅशियम आणि मातीच्या पोताची टक्केवारी यासारखे मातीचे मापदंड प्रविष्ट करा.",
+      labelpH: "पीएच (pH)",
+      labelOrganicCarbon: "सेंद्रिय कार्बन (%)",
+      labelNitrogen: "नायट्रोजन",
+      labelPhosphorus: "फॉस्फरस",
+      labelPotassium: "पोटॅशियम",
+      labelSand: "वाळू (%)",
+      labelSilt: "गाळ (%)",
+      labelClay: "चिकणमाती (%)",
+      predictBtn: "अनुमान लावा",
+      imagePanelTitle: "प्रतिमा अपलोड करून मातीचे वर्गीकरण करा",
+      imageHelp: "मातीचा प्रकार स्वयंचलितपणे निश्चित करण्यासाठी मातीच्या नमुन्याचा फोटो अपलोड करा.",
+      labelSoilImage: "मातीचा फोटो अपलोड करा",
+      imageRecPlaceholder: "प्रतिमा अंदाजासाठी पिकाची शिफारस उपलब्ध नाही.",
+      footerText: "&copy; 2025 SoilClassify &mdash; प्रथिनेश धोते यांनी विकसकांसाठी आणि कृषी उत्साहींसाठी काळजीपूर्वक तयार केले.",
+      // Dynamic content labels for results (these are combined with backend data)
+      predictedSoilTypeLabel: "अंदाजित मातीचा प्रकार: ",
+      classifyingMessage: "वर्गीकरण करत आहे... कृपया प्रतीक्षा करा.",
+      errorPrefix: "त्रुटी: ",
+      noPredictionReturned: "कोणतेही अनुमान परत आले नाही.",
+      noDetailedRecommendation: "विस्तृत शिफारस उपलब्ध नाही.",
+      recommendationAvailable: "शिफारस:",
+      foundInLabel: "येथे आढळले:",
+      bestCropsLabel: "सर्वोत्तम पिके:",
+      noSpecificCrops: "या मातीच्या प्रकारासाठी विशिष्ट पिकांची शिफारस उपलब्ध नाही."
+    }
+  };
+
+  let currentLang = localStorage.getItem('lang') || 'en'; // Load saved language or default to English
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang); // Save language preference
+
+    // Update text content based on data-i18n attributes
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (translations[lang] && translations[lang][key]) {
+        element.innerHTML = translations[lang][key]; // Use innerHTML for cases like footer with &copy;
+      }
+    });
+
+    // Update active class for language buttons
+    document.querySelectorAll('.nav-links button').forEach(button => {
+        if (button.dataset.lang === lang) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+
+    // Re-render any existing prediction/recommendation if it's there
+    // This is important if a prediction was made before language change
+    const soilTypeResult = paramsResult.textContent.replace(translations['en']['predictedSoilTypeLabel'], ''); // Get soil type from previous result
+    if (soilTypeResult && soilTypeResult !== translations['en']['noPredictionReturned']) {
+        // We'll rely on a fresh prediction to get the translated recommendation from the backend
+        // or re-trigger if needed, for simplicity we keep the translation for labels here
+        paramsResult.textContent = translations[currentLang].predictedSoilTypeLabel + soilTypeResult;
+    }
+    // Note: Re-rendering the actual crop recommendation from the backend is complex without
+    // re-triggering prediction or storing the full backend response on frontend.
+    // The `renderCropRecommendation` will handle its internal labels correctly.
+  }
+
+  // Event Listeners for Language Buttons
+  document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+  document.getElementById('lang-mr').addEventListener('click', () => setLanguage('mr'));
+
+  // Function to render the structured crop recommendation (updated for language)
   function renderCropRecommendation(recommendationData, targetElement) {
     targetElement.innerHTML = ''; // Clear previous content
 
     if (!recommendationData) {
-        targetElement.textContent = 'No recommendation available for this soil type.';
+        targetElement.textContent = translations[currentLang].noDetailedRecommendation;
         return;
     }
 
     let html = '';
 
-    // Title
+    // Title (from backend, might contain emoji)
     if (recommendationData.title) {
         html += `<h3>${recommendationData.title}</h3>`;
     }
@@ -429,17 +546,17 @@
 
     // Found in
     if (recommendationData.found_in) {
-        html += `<li>Found in: <span class="crop-name">${recommendationData.found_in}</span></li>`;
+        html += `<li>${translations[currentLang].foundInLabel} <span class="crop-name">${recommendationData.found_in}</span></li>`;
     }
 
     // Best Crops section
     if (recommendationData.crops && Object.keys(recommendationData.crops).length > 0) {
-        html += `<li>Best Crops:`;
+        html += `<li>${translations[currentLang].bestCropsLabel}`;
         html += `<ul>`;
         for (const category in recommendationData.crops) {
             if (recommendationData.crops.hasOwnProperty(category)) {
                 const crops = recommendationData.crops[category];
-                html += `<li><strong>${category}:</strong> `;
+                html += `<li><strong>${category}:</strong> `; // Category name is *not* translated here (comes from backend)
                 html += `<span class="crop-name">${crops.join(', ')}</span>`;
                 html += `</li>`;
             }
@@ -447,7 +564,7 @@
         html += `</ul>`;
         html += `</li>`;
     } else {
-        html += `<li>No specific crop recommendations available for this soil type.</li>`;
+        html += `<li>${translations[currentLang].noSpecificCrops}</li>`;
     }
 
     html += '</ul>';
@@ -458,13 +575,12 @@
   // Parameter form submission handler
   const paramsForm = document.getElementById('paramsForm');
   const paramsResult = document.getElementById('paramsResult');
-  const cropRecommendationDiv = document.getElementById('cropRecommendation'); // Renamed for clarity
+  const cropRecommendationDiv = document.getElementById('cropRecommendation');
   paramsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    paramsResult.textContent = 'Classifying... Please wait.';
-    cropRecommendationDiv.innerHTML = ''; // Clear previous recommendation using innerHTML
+    paramsResult.textContent = translations[currentLang].classifyingMessage;
+    cropRecommendationDiv.innerHTML = '';
     const formData = new FormData(paramsForm);
-    // Convert formData to plain object with floats
     const data = {};
     formData.forEach((value, key) => {
       data[key] = parseFloat(value);
@@ -473,19 +589,17 @@
     try {
       const result = await postJSON('http://127.0.0.1:5000/predict-params', data);
 
-      // Display the soil type prediction (e.g., "Alluvial Soil")
-      paramsResult.textContent = `Predicted Soil Type: ${result.soil_type || 'No prediction returned.'}`;
+      paramsResult.textContent = translations[currentLang].predictedSoilTypeLabel + (result.soil_type || translations[currentLang].noPredictionReturned);
 
-      // Render the structured crop recommendation
       if (result.crop_recommendation) {
         renderCropRecommendation(result.crop_recommendation, cropRecommendationDiv);
       } else {
-        cropRecommendationDiv.textContent = 'No detailed recommendation available.';
+        cropRecommendationDiv.textContent = translations[currentLang].noDetailedRecommendation;
       }
 
     } catch (error) {
-      paramsResult.textContent = 'Error: ' + error.message;
-      cropRecommendationDiv.innerHTML = ''; // Clear recommendation on error
+      paramsResult.textContent = translations[currentLang].errorPrefix + error.message;
+      cropRecommendationDiv.innerHTML = '';
     }
   });
 
@@ -493,13 +607,17 @@
   const imageForm = document.getElementById('imageForm');
   const imageInput = document.getElementById('soilImage');
   const imageResult = document.getElementById('imageResult');
-  const imageCropRecommendation = document.getElementById('imageCropRecommendation');
+  const imageCropRecommendation = document.getElementById('imageCropRecommendation'); // This will now be updated with data-i18n
+
   imageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    imageResult.textContent = 'Classifying... Please wait.';
-    imageCropRecommendation.textContent = 'No crop recommendation available for image predictions.'; // Keep this hardcoded as per your existing setup
+    imageResult.textContent = translations[currentLang].classifyingMessage;
+    // The placeholder for image recommendation is now updated by setLanguage and data-i18n
+    // So we don't need to manually clear/set its initial text here, just ensure it's translated
+    imageCropRecommendation.textContent = translations[currentLang].imageRecPlaceholder;
+
     if (!imageInput.files.length) {
-      imageResult.textContent = 'Please select an image file.';
+      imageResult.textContent = translations[currentLang].errorPrefix + translations[currentLang].labelSoilImage; // Reuse label for "select an image file"
       return;
     }
     const formData = new FormData();
@@ -507,12 +625,17 @@
 
     try {
       const result = await postFormData('http://127.0.0.1:5000/predict-image', formData);
-      imageResult.textContent = `Predicted Soil Type: ${result.soil_type || 'No prediction returned.'}`;
-      // imageCropRecommendation remains unchanged
+      imageResult.textContent = translations[currentLang].predictedSoilTypeLabel + (result.soil_type || translations[currentLang].noPredictionReturned);
+      // imageCropRecommendation text is managed by setLanguage now.
     } catch (error) {
-      imageResult.textContent = 'Error: ' + error.message;
-      // imageCropRecommendation remains unchanged
+      imageResult.textContent = translations[currentLang].errorPrefix + error.message;
+      imageCropRecommendation.textContent = translations[currentLang].imageRecPlaceholder; // Revert to placeholder on error
     }
+  });
+
+  // Initialize language on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    setLanguage(currentLang);
   });
 </script>
 

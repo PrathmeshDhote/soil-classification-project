@@ -29,7 +29,7 @@ except Exception as e:
     exit() # Exit if model is not found
 
 # Define class names corresponding to image model output classes
-IMAGE_MODEL_CLASS_NAMES = ['Red_soil', 'black_soil', 'clay_soil']
+IMAGE_MODEL_CLASS_NAMES = ['Alluvial Soil', 'Arid Soil', 'Black Soil', 'Forest Soil', 'Laterite Soil', 'Peaty Soil', 'Red Soil', 'Saline Soil']
 
 # Crop recommendation dictionary - UPDATED STRUCTURE
 crop_recommendations = {
@@ -164,8 +164,8 @@ def predict_image():
 
 def open_browser():
     # Define the absolute path to your HTML file
-    # This path was provided by you: C:\Users\prath\Documents\GitHub\soil-classification-project\frontend\soil-classification.html
-    html_file_path = r"C:\Users\prath\Documents\GitHub\soil-classification-project\frontend\soil-classification.html"
+    # This path was provided by you: D:\soil-classification-project\frontend\soil-classification.html
+    html_file_path = r"D:\soil-classification-project\frontend\soil-classification.html"
 
     # Convert the local path to a file URI for the browser
     # Replace backslashes with forward slashes and prepend 'file:///'
